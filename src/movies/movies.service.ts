@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Movie } from './interfaces/movie.interface';
 
 @Injectable()
 export class MoviesService {
@@ -6,7 +7,7 @@ export class MoviesService {
         return "this will return all the quote";
    }
     
-    createMovie(movie: any) {
+    createMovie(movie: Movie) {
         return movie;
     }
 }
