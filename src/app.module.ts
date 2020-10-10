@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MoviesController } from './movies/movies.controller';
-import { MoviesService } from './movies/movies.service';
-
+import { MongooseModule } from '@nestjs/mongoose';
+import { MoviesModule } from './movies/movies.module';
 @Module({
-  imports: [],
-  controllers: [AppController, MoviesController],
-  providers: [AppService, MoviesService],
+  imports: [MongooseModule.forRoot(process.env.MONGO_URI, { 
+    useNewUrlParser: true
+  }), 
+  MoviesModule,
+],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

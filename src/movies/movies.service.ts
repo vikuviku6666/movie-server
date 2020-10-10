@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Movie } from './interfaces/movie.interface';
-
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 @Injectable()
 export class MoviesService {
+    constructor(@InjectModel('Movie') private readonly movieModel: Model<Movie>){}
     movies: Movie[] = [
         {
             id: '1',
