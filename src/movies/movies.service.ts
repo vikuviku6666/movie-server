@@ -5,43 +5,28 @@ import { InjectModel } from '@nestjs/mongoose';
 @Injectable()
 export class MoviesService {
     constructor(@InjectModel('Movie') private readonly movieModel: Model<Movie>){}
-    movies: Movie[] = [
-        {
-            id: '1',
-            title: 'Mission Impossible',
-            author: 'Tom Curise'
-        },
-        {
-            id: '2',
-            title: 'London As Fallen',
-            author: 'Gegard'
-        },
-        {
-            id: '3',
-            title: 'Mission Impossible 2',
-            author: 'Tom Curise'
-        }
-    ];
+   
 
-   getMovies(): Movie[] {
-        return this.movies;
+  async getMovies(): Promise<Movie[]> {
+        return await this.movieModel.find().exec();
    }
-   getMovie(id: string): Movie{
-        return this.movies.find(movie => movie.id === id);
+   async getMovie(id: string): Promise<Movie> {
+       return await this.movieModel.findById(id).exec();
    }
     
-    createMovie(movie: Movie) {
-        return movie;
+   async createMovie(movie: Movie): Promise<Movie> {
+        const newMovie = await new this.movieModel(movie);
+        return newMovie.save();
     }
 
-    updateMovie(id: string, updateMovieDto): Movie {
-        const data = this.movies.find(movie => movie.id === id);
-        data.title = updateMovieDto.title ? updateMovieDto.title : data.title;
-        data.author = updateMovieDto.author ? updateMovieDto.author : data.author;
-        return data;
+  async  updateMovie(id: string, updateMovieDto): Promise<Movie> {
+        
+      return await this.movieModel.findByIdAndUpdate(id, updateMovieDto, {
+          new: true,
+      });
     }
 
-    deleteMovie(id: string): Movie{
-        return this.movies.find(movie => movie.id === id);
+   async deleteMovie(id: string): Promise<any> {
+       return await this.movieModel.findByIdAndRemove(id);
    }
 }
