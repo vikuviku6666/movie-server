@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, HttpException, HttpStatus } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { Movie } from './interfaces/movie.interface';
@@ -23,8 +23,13 @@ export class MoviesController {
     }
 
     @Post()
-    createMovie(@Body() createMovieDto: CreateMovieDto): Promise<Movie> {
-        return this.moviesService.createMovie(createMovieDto);
+   async createMovie(@Body() createMovieDto: CreateMovieDto): Promise<Movie> {
+        try {
+            
+            return await this.moviesService.createMovie(createMovieDto);
+        } catch(err) {
+            throw new HttpException(err.message, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
 
     @ApiParam({name: 'id'})
